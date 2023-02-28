@@ -48,6 +48,7 @@ function App() {
       <div>
         <div>
           <input
+            data-testid="name-filter"
             onChange={ ({ target }) => setSearch(target.value) }
             type="text"
           />
