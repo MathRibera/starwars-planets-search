@@ -26,9 +26,19 @@ describe("Aquele teste maneirão", () => {
     userEvent.selectOptions(screen.getByTestId("column-filter"), 'diameter')
     expect(screen.getByTestId('comparison-filter'))
     userEvent.click(screen.getByTestId('comparison-filter'))
+    userEvent.selectOptions(screen.getByTestId('comparison-filter'), 'maior que')
+    userEvent.click(screen.getByTestId('button-filter'))
+    userEvent.click(screen.getByTestId('comparison-filter'))
+    userEvent.selectOptions(screen.getByTestId('comparison-filter'), 'menor que')
+    userEvent.click(screen.getByTestId('button-filter'))
+    userEvent.click(screen.getByTestId('comparison-filter'))
+    userEvent.selectOptions(screen.getByTestId('comparison-filter'), 'igual a')
+    userEvent.click(screen.getByTestId('button-filter'))
+    userEvent.click(screen.getByTestId('button-remove-filters'))
     expect(screen.getByTestId('value-filter'))
     expect(screen.getByTestId('button-filter'))
     expect(screen.getByTestId('button-remove-filters'))
+    userEvent.click(screen.getByTestId('comparison-filter'))
     expect(screen.getByText('Ordenar'))
     expect(screen.getByTestId('column-sort'))
     userEvent.selectOptions(screen.getByTestId('column-sort'), 'diameter')
@@ -80,12 +90,29 @@ describe("Aquele teste maneirão", () => {
     userEvent.click(screen.getByRole('button', { name: /x/i }))
     userEvent.click(screen.getByTestId('column-sort-input-asc'))
     userEvent.click(screen.getByTestId('column-sort-input-desc'))
+    userEvent.click(screen.getByTestId('column-sort-input-asc'))
     await waitFor (() => expect(screen.getByRole('cell', {
       name: /Tatooine/i
     })))
     userEvent.click(screen.getByTestId('button-filter'))
+    await waitFor(() => screen.getByRole('button', { name: /x/i }))
     userEvent.click(screen.getByTestId('button-filter'))
     userEvent.click(screen.getByTestId('button-filter'))
-    userEvent.click(screen.getByTestId('button-remove-filters'))
+    userEvent.click(screen.getByTestId('comparison-filter'))
   });
+  it('outro end to end basicao', async () => {
+    render(<App />);
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledTimes(1)
+      screen.findByTestId("name-filter")
+    })
+    await waitFor(() => expect(screen.getByTestId('name-filter')))
+    userEvent.selectOptions(screen.getByTestId("column-sort"), 'diameter')
+    userEvent.click(screen.getByTestId('column-sort-input-desc'))
+    const planetsNames = await screen.findAllByTestId('planet-name')
+    expect(planetsNames).toHaveLength(10)
+    expect(planetsNames[0].innerHTML).toBe('Bespin')
+  })
+
+
 })
