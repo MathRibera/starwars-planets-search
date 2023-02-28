@@ -1,9 +1,29 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import App from '../App';
+import React from 'react';
+import data from './mockData'
 
-test('I am your test', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/Hello, App!/i);
-  expect(linkElement).toBeInTheDocument();
-});
+describe("Aquele teste maneirão", () => {
+  afterEach(() => jest.clearAllMocks());
+
+  test('teste end to end basicao', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue(data),
+    });
+    render(<App />);
+
+
+
+
+
+
+
+
+
+
+
+
+  });
+})

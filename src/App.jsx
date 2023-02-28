@@ -10,6 +10,7 @@ function App() {
   const { operador, setOperador } = useContext(MyContext);
   const { numericFilters, setNumericFilters } = useContext(MyContext);
   const { dataFiltered, setDataFiltered } = useContext(MyContext);
+  const { order, setOrder } = useContext(MyContext);
 
   console.log(filter);
   const renderFilter = filter.filter((e) => numericFilters.every(
@@ -101,30 +102,74 @@ function App() {
           </button>
         </div>
         <div>
-          <button type="button">REMOVER FILTROS</button>
+          <button
+            data-testid="button-remove-filters"
+            onClick={ () => setNumericFilters([]) }
+            type="button"
+          >
+            REMOVER FILTROS
+
+          </button>
         </div>
         <div>
           <p>Ordenar</p>
-          <select name="Colum">
+          <select
+            data-testid="column-sort"
+            name="Colum"
+            onClick={ ({ target: { value } }) => {
+              setOrder({ ...order, column: value });
+            } }
+          >
             {filter.map((e) => (
-              <option key={ e }>{e}</option>
+              <option key={ e } value={ e }>{e}</option>
             ))}
           </select>
         </div>
         <div>
           <label htmlFor="ASC">
             Ascendente
-            <input type="radio" name="ordenar" id="ASC" />
+            <input
+              onClick={ () => {
+                setOrder({ ...order, sort: 'ASC' });
+              } }
+              data-testid="column-sort-input-asc"
+              type="radio"
+              name="ordenar"
+            />
           </label>
           <label htmlFor="DESC">
             Descendente
-            <input type="radio" name="ordenar" id="DESC" />
+            <input
+              onClick={ () => {
+                setOrder({ ...order, sort: 'DESC' });
+              } }
+              data-testid="column-sort-input-desc"
+              type="radio"
+              name="ordenar"
+            />
           </label>
-          <button type="button">ORDENAR</button>
+          <button
+            data-testid="column-sort-button"
+            type="button"
+          >
+            ORDENAR
+
+          </button>
         </div>
       </div>
       {numericFilters.map((e) => (
-        <div key={ e.filters }>{`${e.filters} ${e.number} ${e.operador}`}</div>
+        <div key={ e.filters } data-testid="filter">
+          {`${e.filters} ${e.number} ${e.operador}`}
+          <button
+            onClick={ () => {
+              const c = numericFilters.filter((f) => f.filters !== e.filters);
+              setNumericFilters(c);
+            } }
+          >
+            X
+
+          </button>
+        </div>
       ))}
       <table>
         <thead>
@@ -139,9 +184,19 @@ function App() {
         <tbody>
           {dataFiltered
             .filter((e) => e.name.toLowerCase().includes(search.toLowerCase()))
+            .sort((a, b) => {
+              const lessOne = -1;
+              if (b[order.column] === 'unknown') {
+                return lessOne;
+              }
+              if (order.sort === 'ASC') {
+                return Number(a[order.column]) - Number(b[order.column]);
+              }
+              return Number(b[order.column]) - Number(a[order.column]);
+            })
             .map((el) => (
               <tr key={ el.name }>
-                <td>{el.name}</td>
+                <td data-testid="planet-name">{el.name}</td>
                 <td>{el.rotation_period}</td>
                 <td>{el.orbital_period}</td>
                 <td>{el.diameter}</td>

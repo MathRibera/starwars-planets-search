@@ -11,8 +11,7 @@ function MyProvider({ children }) {
   const [operador, setOperador] = useState('maior que');
   const [numericFilters, setNumericFilters] = useState([]);
   const [dataFiltered, setDataFiltered] = useState([]);
-  const [dataAscOrdered, setDataAscOrdered] = useState(false);
-  const [dataDescOrdered, setDataDescOrdered] = useState(false);
+  const [order, setOrder] = useState({ column: 'population', sort: 'ASC' });
   const [filter, setFilter] = useState([
     'population',
     'orbital_period',
@@ -47,12 +46,10 @@ function MyProvider({ children }) {
     numericFilters,
     dataFiltered,
     setDataFiltered,
-    dataAscOrdered,
-    setDataAscOrdered,
-    dataDescOrdered,
-    setDataDescOrdered,
     filter,
     setFilter,
+    order,
+    setOrder,
   };
   return (
     <MyContext.Provider value={ value }>
