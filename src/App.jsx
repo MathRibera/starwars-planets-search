@@ -1,23 +1,16 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import './App.css';
 import MyContext from './context/MyContext';
 
 function App() {
-  const { data, loading } = useContext(MyContext);
+  const { data, loading, filter } = useContext(MyContext);
   const { search, setSearch } = useContext(MyContext);
   const { number, setNumber } = useContext(MyContext);
   const { filters, setFilters } = useContext(MyContext);
   const { operador, setOperador } = useContext(MyContext);
   const { numericFilters, setNumericFilters } = useContext(MyContext);
   const { dataFiltered, setDataFiltered } = useContext(MyContext);
-  const [asc, setAsc] = useState();
-  const [filter, setFilter] = useState([
-    'population',
-    'orbital_period',
-    'diameter',
-    'rotation_period',
-    'surface_water',
-  ]);
+
   console.log(filter);
   const renderFilter = filter.filter((e) => numericFilters.every(
     (numericFilter) => numericFilter.filters !== e,
@@ -38,7 +31,7 @@ function App() {
       data,
     );
     setDataFiltered(filteredPlanets);
-  }, [numericFilters]);
+  }, [numericFilters, data, setDataFiltered]);
 
   const OPERATORS = ['maior que', 'menor que', 'igual a'];
   if (loading) return <h1>Carregando</h1>;

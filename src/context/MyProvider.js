@@ -13,6 +13,13 @@ function MyProvider({ children }) {
   const [dataFiltered, setDataFiltered] = useState([]);
   const [dataAscOrdered, setDataAscOrdered] = useState(false);
   const [dataDescOrdered, setDataDescOrdered] = useState(false);
+  const [filter, setFilter] = useState([
+    'population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water',
+  ]);
   useEffect(() => {
     const fetchApi = async () => {
       const { results } = await (await fetch('https://swapi.dev/api/planets')).json();
@@ -42,7 +49,10 @@ function MyProvider({ children }) {
     setDataFiltered,
     dataAscOrdered,
     setDataAscOrdered,
-
+    dataDescOrdered,
+    setDataDescOrdered,
+    filter,
+    setFilter,
   };
   return (
     <MyContext.Provider value={ value }>
