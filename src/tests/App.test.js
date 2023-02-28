@@ -23,12 +23,15 @@ describe("Aquele teste maneirão", () => {
     await waitFor(() => expect(screen.getByTestId('name-filter')))
     expect(screen.getByText(/coluna/i))
     expect(screen.getByTestId("column-filter"))
+    userEvent.selectOptions(screen.getByTestId("column-filter"), 'diameter')
     expect(screen.getByTestId('comparison-filter'))
+    userEvent.click(screen.getByTestId('comparison-filter'))
     expect(screen.getByTestId('value-filter'))
     expect(screen.getByTestId('button-filter'))
     expect(screen.getByTestId('button-remove-filters'))
     expect(screen.getByText('Ordenar'))
     expect(screen.getByTestId('column-sort'))
+    userEvent.selectOptions(screen.getByTestId('column-sort'), 'diameter')
     expect(screen.getByTestId('column-sort-input-asc'))
     expect(screen.getByTestId('column-sort-input-desc'))
     expect(screen.getByText(/name/i))
@@ -73,7 +76,16 @@ describe("Aquele teste maneirão", () => {
     userEvent.type(screen.getByRole('textbox'), '')
     userEvent.type(screen.getByTestId('value-filter'), '4500000000')
     userEvent.click(screen.getByTestId('button-filter'))
-
-
+    await waitFor(() => expect(screen.getByRole('button', { name: /x/i })))
+    userEvent.click(screen.getByRole('button', { name: /x/i }))
+    userEvent.click(screen.getByTestId('column-sort-input-asc'))
+    userEvent.click(screen.getByTestId('column-sort-input-desc'))
+    await waitFor (() => expect(screen.getByRole('cell', {
+      name: /Tatooine/i
+    })))
+    userEvent.click(screen.getByTestId('button-filter'))
+    userEvent.click(screen.getByTestId('button-filter'))
+    userEvent.click(screen.getByTestId('button-filter'))
+    userEvent.click(screen.getByTestId('button-remove-filters'))
   });
 })
