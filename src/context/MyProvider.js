@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import MyContext from './MyContext';
 
 function MyProvider({ children }) {
@@ -32,7 +32,7 @@ function MyProvider({ children }) {
     };
     fetchApi();
   }, []);
-  const value = { data,
+  const value = useMemo(() => ({ data,
     loading,
     setSearch,
     search,
@@ -50,7 +50,8 @@ function MyProvider({ children }) {
     setFilter,
     order,
     setOrder,
-  };
+  }), [data, loading, search, filter, number,
+    operador, numericFilters, dataFiltered, filters, order]);
   return (
     <MyContext.Provider value={ value }>
       {children}
