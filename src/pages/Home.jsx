@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import MyContext from '../context/MyContext';
 
 function Home() {
@@ -9,7 +9,9 @@ function Home() {
   const { operador, setOperador } = useContext(MyContext);
   const { numericFilters, setNumericFilters } = useContext(MyContext);
   const { dataFiltered, setDataFiltered } = useContext(MyContext);
+
   const { order, setOrder } = useContext(MyContext);
+  const [ordering, setOrdering] = useState({ column: 'population', sort: 'ASC' });
 
   const renderFilter = filter.filter((e) => numericFilters.every(
     (numericFilter) => numericFilter.filters !== e,
@@ -116,7 +118,7 @@ function Home() {
             data-testid="column-sort"
             name="Colum"
             onClick={ ({ target: { value } }) => {
-              setOrder({ ...order, column: value });
+              setOrdering({ ...ordering, column: value });
             } }
           >
             {filter.map((e) => (
@@ -129,7 +131,7 @@ function Home() {
             Ascendente
             <input
               onClick={ () => {
-                setOrder({ ...order, sort: 'ASC' });
+                setOrdering({ ...ordering, sort: 'ASC' });
               } }
               data-testid="column-sort-input-asc"
               type="radio"
@@ -140,7 +142,7 @@ function Home() {
             Descendente
             <input
               onClick={ () => {
-                setOrder({ ...order, sort: 'DESC' });
+                setOrdering({ ...ordering, sort: 'DESC' });
               } }
               data-testid="column-sort-input-desc"
               type="radio"
@@ -148,6 +150,9 @@ function Home() {
             />
           </label>
           <button
+            onClick={ () => {
+              setOrder(ordering);
+            } }
             data-testid="column-sort-button"
             type="button"
           >
